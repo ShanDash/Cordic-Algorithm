@@ -10,7 +10,7 @@ module tb_cordic;
   wire done;
   wire [15:0] cos, sin;
 
-  // Instantiate your DUT
+  // Instantiate DUT
   cordic_sin_cos dut (
     .clk(clk),
     .reset(reset),
@@ -34,24 +34,51 @@ module tb_cordic;
     #20;
     reset = 0;
 
-    // Set input angle to ~45 degrees (pi/4 radians)
-    // 0.785398 * 16384 ≈ 12867
+    // ========================
+    // Test 1: 0 degrees (0 rad)
+    angle_radian = 16'sd0;
+    #10; start = 1; #10; start = 0;
+    wait(done == 1);
+    $display("Angle: 0 deg, COS: %d, SIN: %d", cos, sin);
+    #20;
+
+    // ========================
+    // Test 2: 30 degrees (pi/6 ≈ 0.5236 rad)
+    // 0.5236 * 16384 ≈ 8576
+    angle_radian = 16'sd8576;
+    #10; start = 1; #10; start = 0;
+    wait(done == 1);
+    $display("Angle: 30 deg, COS: %d, SIN: %d", cos, sin);
+    #20;
+
+    // ========================
+    // Test 3: 45 degrees (pi/4 ≈ 0.7854 rad)
+    // 0.7854 * 16384 ≈ 12867
     angle_radian = 16'sd12867;
+    #10; start = 1; #10; start = 0;
+    wait(done == 1);
+    $display("Angle: 45 deg, COS: %d, SIN: %d", cos, sin);
+    #20;
 
-    // Pulse start for one clock
-    #10;
-    start = 1;
-    #10;
-    start = 0;
+    // ========================
+    // Test 4: 60 degrees (pi/3 ≈ 1.0472 rad)
+    // 1.0472 * 16384 ≈ 17152
+    angle_radian = 16'sd17152;
+    #10; start = 1; #10; start = 0;
+    wait(done == 1);
+    $display("Angle: 60 deg, COS: %d, SIN: %d", cos, sin);
+    #20;
 
-    // Wait for done
-    wait (done == 1);
+    // ========================
+    // Test 5: 90 degrees (pi/2 ≈ 1.5708 rad)
+    // 1.5708 * 16384 ≈ 25735
+    angle_radian = 16'sd25735;
+    #10; start = 1; #10; start = 0;
+    wait(done == 1);
+    $display("Angle: 90 deg, COS: %d, SIN: %d", cos, sin);
+    #20;
 
-    // Print results
-    $display("Test angle: %d", angle_radian);
-    $display("COS (Q1.14): %d", cos);
-    $display("SIN (Q1.14): %d", sin);
-
+    $display("All tests done!");
     $stop;
   end
 
